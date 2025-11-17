@@ -1,19 +1,27 @@
 <x-layout>
-    <h1>All Itineraries</h1>
+
+    <h1 class="page-title">All Itineraries</h1>
+    <hr>
 
     @if ($itineraries->count() > 0)
-        <ul>
+
+        <div class="card-container">
             @foreach ($itineraries as $itinerary)
-                <li>
-                    <a href="{{ route('itineraries.show', $itinerary->id) }}">
-                        {{ $itinerary->trip_name }}
+                <div class="card">
+                    <h3>{{ $itinerary->trip_name }}</h3>
+                    <p><strong>Destination:</strong> {{ $itinerary->destinations }}</p>
+
+                    <a href="{{ route('itineraries.show', $itinerary->id) }}" class="card-btn">
+                        View Details
                     </a>
-                    <br>
-                    <small>Destination: {{ $itinerary->destinations }}</small>
-                </li>
+                </div>
             @endforeach
-        </ul>
+        </div>
+
+        {{ $itineraries->links() }}
+
     @else
         <p>No itineraries found.</p>
     @endif
+
 </x-layout>

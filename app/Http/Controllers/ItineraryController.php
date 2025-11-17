@@ -7,15 +7,17 @@ use Illuminate\Http\Request;
 
 class ItineraryController extends Controller
 {
-    //Show all itineraries
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch all itineraries from the database
-         $itineraries = \App\Models\Itinerary::all();
+        $search = $request->input('search');
 
-        // Return the view and pass the data to it
+        $itineraries = Itinerary::when($search, function ($query, $search) {
+            return $query->where('destinations', 'like', '%' . $search . '%');
+        })->paginate(3); // <-- PAGINATION ADDED HERE
+
         return view('itineraries.index', compact('itineraries'));
     }
+
 
     // Show the form for creating a new itinerary.
      
@@ -30,6 +32,7 @@ class ItineraryController extends Controller
         // Validate input (basic check)
         $request->validate([
             'trip_name' => 'required',
+            'country' => 'required',
             'destinations' => 'required',
             'overview' => 'required',
             'suggested_dates' => 'required',
@@ -63,6 +66,7 @@ class ItineraryController extends Controller
      {
         $request->validate([
             'trip_name' => 'required',
+            'country' => 'required',
             'destinations' => 'required',
             'overview' => 'required',
             'suggested_dates' => 'required',

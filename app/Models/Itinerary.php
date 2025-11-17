@@ -15,6 +15,7 @@ class Itinerary extends Model
     // Fields that can be filled through forms
     protected $fillable = [
         'trip_name',
+        'country',
         'destinations',
         'overview',
         'suggested_dates',

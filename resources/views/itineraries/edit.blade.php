@@ -20,6 +20,9 @@
         <label>Trip Name:</label><br>
         <input type="text" name="trip_name" value="{{ $itinerary->trip_name }}"><br><br>
 
+        <label>Country:</label><br>
+        <input type="text" name="country" value="{{ $itinerary->country }}"><br><br>
+
         <label>Destinations:</label><br>
         <input type="text" name="destinations" value="{{ $itinerary->destinations }}"><br><br>
 
@@ -30,7 +33,11 @@
         <input type="text" name="suggested_dates" value="{{ $itinerary->suggested_dates }}"><br><br>
 
         <label>Difficulty Level:</label><br>
-        <input type="text" name="difficulty_level" value="{{ $itinerary->difficulty_level }}"><br><br>
+        <select name="difficulty_level">
+            <option value="easy" {{ $itinerary->difficulty_level == 'easy' ? 'selected' : '' }}>Easy</option>
+            <option value="medium" {{ $itinerary->difficulty_level == 'medium' ? 'selected' : '' }}>Medium</option>
+            <option value="hard" {{ $itinerary->difficulty_level == 'hard' ? 'selected' : '' }}>Hard</option>
+        </select><br><br>
 
         <label>Submitted By:</label><br>
         <input type="text" name="submitted_by" value="{{ $itinerary->submitted_by }}"><br><br>
