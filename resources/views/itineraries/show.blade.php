@@ -1,6 +1,7 @@
 <x-layout>
     <h1>{{ $itinerary->trip_name }}</h1>
 
+    <p><strong>Country:</strong> {{ $itinerary->country }}</p>
     <p><strong>Destinations:</strong> {{ $itinerary->destinations }}</p>
     <p><strong>Overview:</strong> {{ $itinerary->overview }}</p>
     <p><strong>Suggested Dates:</strong> {{ $itinerary->suggested_dates }}</p>
