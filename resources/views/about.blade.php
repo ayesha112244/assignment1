@@ -3,16 +3,25 @@
         <h2>About This Web App</h2>
 
         <p>
-            This Travel Itinerary Ideas application was created as part of the web development coursework. 
-            The purpose of this app is to provide a simple platform where users can add, edit, view, and 
-            delete travel itinerary ideas. It helps users share trip suggestions such as “Explore Northern 
-            Pakistan” or “Beach Tour in Cornwall,” and browse other people’s ideas for inspiration.
+            TripNest is a simple and user-friendly web application designed for exploring and sharing travel itinerary ideas. 
+            Whether you're planning your next adventure or looking for inspiration, this platform allows you to browse trip 
+            suggestions from around the world.
         </p>
 
         <p>
-            The system demonstrates key Laravel concepts including routing, Blade templating, form validation, 
-            database migrations, CRUD operations, pagination, and search functionality. This allows users to 
-            efficiently manage travel plans while exploring trips contributed by others.
+            Users can create detailed itineraries by adding destinations, dates, difficulty levels, and personal notes. 
+            Each itinerary can be viewed, edited, or deleted, making it easy to manage travel plans in one place.
+        </p>
+
+        <p>
+            This application was built using Laravel as part of an academic project. It demonstrates essential web development 
+            concepts such as MVC architecture, CRUD functionality, validation, pagination, database migrations, and reusable 
+            Blade components. The goal is to provide a clean, smooth, and practical experience while showcasing core Laravel skills.
+        </p>
+
+        <p>
+            Whether you're contributing your own trip ideas or exploring itineraries shared by others, TripNest aims to make 
+            travel planning simple, organised, and enjoyable.
         </p>
     </div>
 </x-layout>

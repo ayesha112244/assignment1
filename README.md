@@ -8,13 +8,10 @@ This web application, Travel Itinerary Ideas, allows users to create, view, edit
 
 The application is built using Laravel 11, MySQL, and a single well-structured database table, fully meeting the requirements of Assignment 1. The app focuses on clean navigation, simple styling, validation, and proper use of Laravel MVC architecture. Additional features such as search, pagination, and a Blade component have been implemented as well.
 
-The system stores all itineraries in a **single database table** named `itineraries`.
-
 ---
 
-## Scenario Overview
-
-In this scenario, users contribute itineraries describing possible trips. Each itinerary record contains:
+## Scenario Overview  
+Users contribute itineraries describing possible trips. Each itinerary contains:
 
 - Trip Name  
 - Country  
@@ -24,84 +21,101 @@ In this scenario, users contribute itineraries describing possible trips. Each i
 - Difficulty Level  
 - Submitted By  
 
-These fields help users understand the nature of each travel plan. All itineraries are stored in a single database table `itineraries`.
+---
+
+## Database Summary (Shortened as Requested)
+This project uses **one database table** called `itineraries`.
+
+The table stores all the required fields for an itinerary:
+
+- trip_name  
+- country  
+- destinations  
+- overview  
+- suggested_dates  
+- difficulty_level  
+- submitted_by  
+
+Only one migration is used to create this table.
+A small database seeder is included to automatically insert multiple sample itineraries (around 12 records).
+This helps the viewer to quickly test features like:
+
+- Search  
+- Pagination  
+- CRUD  
+- Layout & data flow  
+
+without manually adding records.
+
+# Understanding MVC in This Project  
+This application clearly applies the **Model–View–Controller (MVC)** architecture.  
+Below is a more detailed explanation of this architecture:
 
 ---
 
-## Database & Migrations
-The database design follows **First Normal Form (1NF)**: each field stores a single, atomic value, and the table has a clear primary key.
+## **1. Model – The Itinerary Model**
+The **Model** represents the structure of the database table and handles communication with MySQL using Eloquent ORM.
 
-The main migration creates the table, and an additional migration adds the country field:
+**Model responsibilities in this project:**  
+- Defines the table name  
+- Defines which fields can be mass-assigned  
+- Represents each itinerary as an object  
+- Interacts with the database when creating, updating, or deleting records  
 
+### Example (Itinerary.php)
 ```php
-Schema::create('itineraries', function (Blueprint $table) {
-    $table->id();
-    $table->string('trip_name');
-    $table->string('country');
-    $table->string('destinations');
-    $table->text('overview');
-    $table->string('suggested_dates');
-    $table->string('difficulty_level');
-    $table->string('submitted_by');
-    $table->timestamps();
-});
-```
-This structure supports clean CRUD operations while staying within the “one table only” restriction.
+class Itinerary extends Model
+{
+    protected $table = 'itineraries';
 
-## Database Seeder
-To support easy setup during marking, a database seeder was created. The seeder automatically inserts three example itineraries into the `itineraries` table. This ensures the application has meaningful sample data immediately after running:
-
+    protected $fillable = [
+        'trip_name',
+        'country',
+        'destinations',
+        'overview',
+        'suggested_dates',
+        'difficulty_level',
+        'submitted_by',
+    ];
+}
 ```
-php artisan migrate:fresh --seed
-```
->The seeder includes a variety of destinations, difficulty levels, and contributors. This demonstrates how real data appears in the system and allows the routes, views, and pagination features to be tested without requiring manual input.
 
-- Example structure of the seeder:
+This allows the controller to simply call:  
 ```php
-DB::table('itineraries')->insert([
-    [
-        'trip_name' => 'Discover Northern Pakistan',
-        'destinations' => 'Hunza, Skardu, Gilgit',
-        'overview' => 'A scenic 7-day journey through the valleys and mountains of Northern Pakistan.',
-        'suggested_dates' => 'June - August',
-        'difficulty_level' => 'Moderate',
-        'submitted_by' => 'Ayesha Sohail',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ],
-    ...
-]);
-
+Itinerary::create($request->all());
 ```
-The seeder supports consistency, makes testing easier, and aligns with Laravel’s recommended approach for populating databases during development.
-
-## Understanding MVC in This Project
-
-Laravel uses the **Model–View–Controller (MVC)** architecture, and this application demonstrates it clearly.
 
 ---
 
-## 1️. Model (Itinerary Model)
+## **2. Controller – ItineraryController**
+The **Controller** contains all application logic.  
+It acts as the "middle layer" between the model and the views.
 
-The **Itinerary model** represents the database table and communicates with MySQL using Eloquent ORM.
+### Controller Responsibilities:
+- Fetch itineraries from the database  
+- Apply search filtering  
+- Paginate results  
+- Validate data  
+- Store new itineraries  
+- Update existing ones  
+- Delete itineraries  
+- Pass data to the Blade templates  
 
----
-
-## 2️. Controller (ItineraryController)
-
-The **ItineraryController** manages all logic, including search, pagination, validation, storing, updating, editing and deleting records.
-
-### Example: Search + Pagination Logic
-
+### Example: Search + Pagination
 ```php
 $search = $request->input('search');
 
 $itineraries = Itinerary::when($search, function ($query, $search) {
-    return $query->where('destinations', 'like', '%' . $search . '%');
+    return $query->where(function ($q) use ($search) {
+        $q->where('destinations', 'like', '%' . $search . '%')
+          ->orWhere('country', 'like', '%' . $search . '%');
+    });
 })->paginate(3);
+
+return view('itineraries.index', compact('itineraries'));
 ```
 
-### Example of Laravel validation:
+### Example: Validation
 ```php
 $request->validate([
     'trip_name' => 'required',
@@ -114,10 +128,13 @@ $request->validate([
 ]);
 ```
 
-## 3️. Views (Blade Templates)
-All user-facing pages are built using Blade.
-The main view displays itineraries with pagination:
+---
 
+## **3. Views – Blade Templates**
+The **View** displays data to the user.  
+Blade is used to generate clean, readable, user-friendly pages.
+
+### Example: Displaying Records With Pagination
 ```php
 @foreach ($itineraries as $item)
     <tr>
@@ -130,19 +147,35 @@ The main view displays itineraries with pagination:
 
 {{ $itineraries->links() }}
 ```
-This keeps the interface clean, readable, and compliant with the assignment requirement of CSS-only styling.
 
-# Routes
+Views also include:
 
-The application uses RESTful resource routes:
+- Cards layout  
+- Feedback messages  
+- Search results messages  
+- Reusable Navbar Component  
+
+---
+
+# Routes  
+The application uses clean RESTful routes:
 
 ```php
 Route::get('/', [ItineraryController::class, 'index']);
 Route::resource('itineraries', ItineraryController::class);
 ```
-This ensures clean navigation and proper URL structure for all CRUD features.
 
-# Use of Laravel Components (Additional Feature)
+This automatically handles:
+
+- /itineraries (list)  
+- /itineraries/create  
+- /itineraries/{id}/edit  
+- /itineraries/{id} (show)  
+- POST, PUT, DELETE actions  
+
+---
+
+# Use of Laravel Components
 To improve maintainability, a Blade component was created for the navigation bar:
 
 ```php

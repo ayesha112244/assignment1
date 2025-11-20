@@ -32,32 +32,69 @@ nav a {
   padding: 20px;
   border-radius: 10px;
 }
-/* Pagination container */
+
+/* ===== PAGINATION STYLING ===== */
+
 .pagination {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
-    list-style: none;
+    gap: 6px;
+    margin-top: 25px;
     padding: 0;
+    list-style: none;
 }
 
-/* Each pagination item */
+/* Pagination items */
 .pagination li {
-    margin: 0 5px;
+    display: flex;
 }
 
-/* Links & text inside boxes */
+/* Circular buttons */
 .pagination li a,
 .pagination li span {
-    display: block;
-    padding: 8px 14px;
-    border: 1px solid #ccc;
+    padding: 8px 12px;
+    min-width: 34px;
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
     border-radius: 50%;
-    text-decoration: none;
-    color: #333;
-    background: white;
-    font-size: 14px;
+    border: 1px solid rgba(0,0,0,0.25);
+    color: #003300;
+    font-weight: bold;
+    transition: 0.25s ease;
 }
+
+/* Hover */
+.pagination li a:hover {
+    background: #1d6a1d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Active page */
+.pagination li.active span {
+    background: #1d6a1d;
+    color: white;
+    border-color: #145514;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Fix SVG arrow colour */
+.pagination svg {
+    width: 14px;
+    height: 14px;
+    stroke: #003300;
+}
+
+.pagination li a:hover svg {
+    stroke: white;
+}
+
 
 /* Hover effect */
 .pagination li a:hover {
@@ -171,3 +208,202 @@ nav a {
   text-align: center;
 }
 
+/* ----------- SHOW PAGE STYLING ----------- */
+
+.detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.detail-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #003300;
+}
+
+/* Transparent, glass-like card */
+.detail-box {
+    background: rgba(255, 255, 255, 0.60); /* semi-transparent */
+    backdrop-filter: blur(6px); /* slight blur for professional glass effect */
+    padding: 25px;
+    border-radius: 12px;
+
+    border: 1px solid rgba(0, 0, 0, 0.25); /* soft black border */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.detail-box p {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #000; 
+}
+
+.label {
+    font-weight: bold;
+    color: #003300;
+}
+
+/* Buttons center */
+.detail-buttons {
+    display: flex;
+    justify-content: center;   /* Center horizontally */
+    align-items: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+}
+
+.edit-btn {
+    background: #1d6a1d;
+}
+.edit-btn:hover {
+    background: #145514;
+}
+
+.delete-btn {
+    background: hsl(0, 83%, 36%);
+}
+.delete-btn:hover {
+    background: #a30000;
+}
+
+/* Back link */
+.back-link {
+    display: block;
+    margin-top: 25px;
+    text-align: center;
+    font-weight: bold;
+}
+/* ---------- FORM PAGE STYLING ---------- */
+
+.form-page-container {
+    max-width: 700px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.form-title {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #003300;
+}
+
+/* Glass-style transparent form card */
+.form-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    padding: 25px;
+    border-radius: 12px;
+
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #003300;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    border: 1px solid #888;
+    font-size: 15px;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #1d6a1d;
+    box-shadow: 0 0 6px rgba(29, 106, 29, 0.5);
+}
+
+.form-btn {
+    width: 100%;
+    background: #1d6a1d;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.form-btn:hover {
+    background: #145514;
+}
+
+/* Error message box */
+.form-errors {
+    background: rgba(255, 0, 0, 0.15);
+    border-left: 4px solid red;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+}
+
+.form-errors ul {
+    margin: 0;
+    padding-left: 15px;
+}
+
+/* Back link */
+.back-link {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.field-error {
+    color: hwb(0 2% 22%);
+    font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+
+.required {
+    color: red;
+    font-weight: bold;
+}
+.search-feedback {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(5px);
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.3);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+    text-align: center;
+}
+
+.search-feedback p {
+    margin: 6px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: lab(33.27% -40.73 39.18);
+}
+
+.search-feedback strong {
+    color: hsl(120, 56%, 4%);
+}

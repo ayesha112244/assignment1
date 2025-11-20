@@ -12,8 +12,11 @@ class ItineraryController extends Controller
         $search = $request->input('search');
 
         $itineraries = Itinerary::when($search, function ($query, $search) {
-            return $query->where('destinations', 'like', '%' . $search . '%');
-        })->paginate(3); // <-- PAGINATION ADDED HERE
+            return $query->where(function ($q) use ($search) {
+            $q->where('destinations', 'like', '%' . $search . '%')
+          ->orWhere('country', 'like', '%' . $search . '%');
+        });
+    })->paginate(3);
 
         return view('itineraries.index', compact('itineraries'));
     }
