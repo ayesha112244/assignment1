@@ -23,7 +23,7 @@ Users contribute itineraries describing possible trips. Each itinerary contains:
 
 ---
 
-## Database Summary (Shortened as Requested)
+## Database Summary
 This project uses **one database table** called `itineraries`.
 
 The table stores all the required fields for an itinerary:
