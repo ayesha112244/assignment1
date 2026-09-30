@@ -1,216 +1,84 @@
-# CHT2520 Assignment 1 U2386691 Ayesha Sohail
+# Travel Itinerary Ideas — Laravel CRUD Web App
 
-# Travel Itinerary Web Application
-A Laravel-based CRUD application for creating and exploring travel itinerary ideas.
+A Laravel web application where users can **create, browse, search, edit and delete travel itinerary ideas**, such as "Explore Northern Pakistan" or "Weekend in Scotland". It was built to demonstrate a clean **MVC architecture**, RESTful routing, validation and reusable Blade components.
 
-## Introduction
-This web application, Travel Itinerary Ideas, allows users to create, view, edit, and delete travel plans. The goal of the system is to provide a simple platform where users can share trip suggestions (e.g., “Explore Northern Pakistan” or “Weekend in Scotland”) and browse ideas submitted by others.
-
-The application is built using Laravel 11, MySQL, and a single well-structured database table, fully meeting the requirements of Assignment 1. The app focuses on clean navigation, simple styling, validation, and proper use of Laravel MVC architecture. Additional features such as search, pagination, and a Blade component have been implemented as well.
+> Part 1 of a two-part project. The extended version, with authentication, reviews and a Tailwind UI, is **[Earth Trekkers](https://github.com/ayesha112244/earth-trekkers)**.
+>
+> Coursework for Advanced Web Programming (CHT2520), University of Huddersfield, 2025.
 
 ---
 
-## Scenario Overview  
-Users contribute itineraries describing possible trips. Each itinerary contains:
+## Features
 
-- Trip Name  
-- Country  
-- Destinations  
-- Overview  
-- Suggested Dates  
-- Difficulty Level  
-- Submitted By  
+- **Full CRUD:** create, view, edit and delete itineraries
+- **Search** itineraries by destination or country
+- **Pagination** for easy browsing
+- **Server-side validation** with error messages on every form
+- **Success feedback messages** after each action
+- **Reusable Blade components** for the layout and navbar
+- **Database seeder** with 12 sample itineraries, ready for testing
+- **Responsive card layout** styled with custom CSS (no CSS framework)
 
----
-
-## Database Summary
-This project uses **one database table** called `itineraries`.
-
-The table stores all the required fields for an itinerary:
-
-- trip_name  
-- country  
-- destinations  
-- overview  
-- suggested_dates  
-- difficulty_level  
-- submitted_by  
-
-Only one migration is used to create this table.
-A small database seeder is included to automatically insert multiple sample itineraries (around 12 records).
-This helps the viewer to quickly test features like:
-
-- Search  
-- Pagination  
-- CRUD  
-- Layout & data flow  
-
-without manually adding records.
-
-# Understanding MVC in This Project  
-This application clearly applies the **Model–View–Controller (MVC)** architecture.  
-Below is a more detailed explanation of this architecture:
+Each itinerary stores a trip name, country, destinations, overview, suggested dates, difficulty level and the name of the person who submitted it.
 
 ---
 
-## **1. Model – The Itinerary Model**
-The **Model** represents the structure of the database table and handles communication with MySQL using Eloquent ORM.
+## Architecture (MVC)
 
-**Model responsibilities in this project:**  
-- Defines the table name  
-- Defines which fields can be mass-assigned  
-- Represents each itinerary as an object  
-- Interacts with the database when creating, updating, or deleting records  
+| Layer | Implementation |
+|---|---|
+| **Model** | `Itinerary`, an Eloquent model with mass-assignment protection |
+| **Controller** | `ItineraryController` handles listing, search, pagination, validation, create, update and delete |
+| **Views** | Blade templates (`index`, `show`, `create`, `edit`) plus `<x-layout>` and `<x-navbar>` components |
+| **Routes** | RESTful resource routes via `Route::resource('itineraries', ...)` |
+| **Database** | MySQL with an `itineraries` table, created through migrations and filled by a seeder |
 
-### Example (Itinerary.php)
+### Search and pagination example
 ```php
-class Itinerary extends Model
-{
-    protected $table = 'itineraries';
-
-    protected $fillable = [
-        'trip_name',
-        'country',
-        'destinations',
-        'overview',
-        'suggested_dates',
-        'difficulty_level',
-        'submitted_by',
-    ];
-}
-```
-
-This allows the controller to simply call:  
-```php
-Itinerary::create($request->all());
-```
-
----
-
-## **2. Controller – ItineraryController**
-The **Controller** contains all application logic.  
-It acts as the "middle layer" between the model and the views.
-
-### Controller Responsibilities:
-- Fetch itineraries from the database  
-- Apply search filtering  
-- Paginate results  
-- Validate data  
-- Store new itineraries  
-- Update existing ones  
-- Delete itineraries  
-- Pass data to the Blade templates  
-
-### Example: Search + Pagination
-```php
-$search = $request->input('search');
-
 $itineraries = Itinerary::when($search, function ($query, $search) {
     return $query->where(function ($q) use ($search) {
-        $q->where('destinations', 'like', '%' . $search . '%')
-          ->orWhere('country', 'like', '%' . $search . '%');
+        $q->where('destinations', 'like', "%{$search}%")
+          ->orWhere('country', 'like', "%{$search}%");
     });
 })->paginate(3);
-
-return view('itineraries.index', compact('itineraries'));
-```
-
-### Example: Validation
-```php
-$request->validate([
-    'trip_name' => 'required',
-    'country' => 'required',
-    'destinations' => 'required',
-    'overview' => 'required',
-    'suggested_dates' => 'required',
-    'difficulty_level' => 'required',
-    'submitted_by' => 'required',
-]);
 ```
 
 ---
 
-## **3. Views – Blade Templates**
-The **View** displays data to the user.  
-Blade is used to generate clean, readable, user-friendly pages.
+## Tech Stack
 
-### Example: Displaying Records With Pagination
-```php
-@foreach ($itineraries as $item)
-    <tr>
-        <td>{{ $item->trip_name }}</td>
-        <td>{{ $item->country }}</td>
-        <td>{{ $item->destinations }}</td>
-        <td>{{ $item->difficulty_level }}</td>
-    </tr>
-@endforeach
-
-{{ $itineraries->links() }}
-```
-
-Views also include:
-
-- Cards layout  
-- Feedback messages  
-- Search results messages  
-- Reusable Navbar Component  
+`Laravel 12` · `PHP 8.2+` · `MySQL` · `Blade` · `Eloquent ORM` · `HTML/CSS`
 
 ---
 
-# Routes  
-The application uses clean RESTful routes:
+## Getting Started
 
-```php
-Route::get('/', [ItineraryController::class, 'index']);
-Route::resource('itineraries', ItineraryController::class);
+**Requirements:** PHP 8.2+, Composer, MySQL (e.g. via XAMPP)
+
+```bash
+git clone https://github.com/ayesha112244/travel-itinerary-ideas.git
+cd travel-itinerary-ideas
+
+composer install
+cp .env.example .env
+php artisan key:generate
 ```
 
-This automatically handles:
+Create a MySQL database, then update the `DB_` settings in `.env`.
 
-- /itineraries (list)  
-- /itineraries/create  
-- /itineraries/{id}/edit  
-- /itineraries/{id} (show)  
-- POST, PUT, DELETE actions  
+```bash
+php artisan migrate --seed
+php artisan serve
+```
+
+Open **http://127.0.0.1:8000**
 
 ---
 
-# Use of Laravel Components
-To improve maintainability, a Blade component was created for the navigation bar:
+## What's Next
 
-```php
-<x-navbar />
-```
-This reduces repetition across pages and demonstrates deeper understanding of Laravel features beyond the basic requirements.
+This project was extended into **[Earth Trekkers](https://github.com/ayesha112244/earth-trekkers)**, which adds user authentication, role-based authorization, a reviews system, a Destinations and Countries module, and a Tailwind CSS + Alpine.js interface.
 
-## Design & Usability Practices
+---
 
-Although no CSS frameworks were allowed, the app includes:
-
-- Clean spacing
-
-- Responsive card/grid layout
-
-- Readable fonts
-
-- Good contrast
-
-- Persistent navigation
-
-- Feedback messages (success alerts)
-
-These choices improve user experience and demonstrate attention to usability principles.
-
-## Additional Features Implemented 
-
-The application includes all bonus features:
-
-- Search functionality
-- Pagination
-- Laravel validation
-- Blade component (navbar)
-- User-friendly styling
-- Clear navigation and layout
-
-## Conclusion
-This project successfully implements a complete Laravel CRUD application using a single table, demonstrating strong understanding of MVC, migrations, Blade, and Laravel core features. Extra enhancements such as search, pagination, validation, and component usage elevate the project quality and align with the assignment’s criteria. The app is simple, structured, and easy to use.
+**Author:** Ayesha Sohail · [GitHub](https://github.com/ayesha112244)
